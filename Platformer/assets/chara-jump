@@ -1,0 +1,7 @@
+chara-jump.png
+size:128,64
+repeat:none
+player-jump-1
+bounds:37,2,33,32
+player-jump-2
+bounds:2,2,33,32
