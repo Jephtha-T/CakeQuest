@@ -2,6 +2,7 @@ package com.mygdx.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -25,6 +26,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Tools.B2WorldCreator;
+import com.mygdx.game.Tools.WorldContactListener;
 
 
 public class PlayScreen implements Screen {
@@ -39,6 +41,7 @@ public class PlayScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
     private Chara player;
+    private Music music;
     private final float SCREEN_LEFT_BOUND = 2;
     private final float SCREEN_RIGHT_BOUND =10;
     private static final float MAP_SCROLL_SPEED = 1f;
@@ -58,8 +61,14 @@ public class PlayScreen implements Screen {
         gamecam.position.set(gamePort.getWorldWidth()/2 , gamePort.getWorldHeight()/2, 0);
         world = new World(new Vector2(0, -10/ MyGdxGame.PPM), true);
         b2dr = new Box2DDebugRenderer();
-        player = new Chara(world, this);
-        new B2WorldCreator(world, map);
+        player = new Chara(this);
+        new B2WorldCreator(this);
+
+        world.setContactListener(new WorldContactListener());
+
+        music = MyGdxGame.manager.get("Audio/bgmusic.mp3", Music.class);
+        music.setLooping(true);
+        music.play();
     }
 
     public TextureAtlas getAtlas(){
@@ -90,15 +99,14 @@ public class PlayScreen implements Screen {
 
     public void handleInput(float dt){
         // Apply gravity
-        System.out.println("Player Velocity: " + player.b2body.getLinearVelocity());
-
+        //System.out.println("Player Velocity: " + player.b2body.getLinearVelocity());
         // Apply gravity
         player.b2body.applyForceToCenter(0, -9.8f, true); // Adjust the gravity force as needed
-
-        // Jumping
-        if(Gdx.input.isKeyJustPressed(Input.Keys.UP) && Math.abs(player.b2body.getLinearVelocity().y) < 0.01f) // Ensures the player can only jump if it's not already in the air
-            player.b2body.applyLinearImpulse(new Vector2(0, 3.3f), player.b2body.getWorldCenter(), true); // Adjust the impulse for a higher jump
-
+        if(player.currentState != Chara.State.Knocked) {
+            // Jumping
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && Math.abs(player.b2body.getLinearVelocity().y) < 0.01f) // Ensures the player can only jump if it's not already in the air
+                player.b2body.applyLinearImpulse(new Vector2(0, 3.3f), player.b2body.getWorldCenter(), true); // Adjust the impulse for a higher jump
+        }
     }
 
 
@@ -113,6 +121,7 @@ public class PlayScreen implements Screen {
         updateCharacterPosition();
         world.step(1 / 60f, 6, 2);
         player.update(dt);
+        hud.update(dt);
 
     }
 
@@ -165,6 +174,13 @@ public class PlayScreen implements Screen {
         gamePort.update(width, height);
     }
 
+    public TiledMap getMap(){
+        return map;
+    }
+
+    public World getWorld(){
+        return world;
+    }
 
     @Override
     public void pause() {

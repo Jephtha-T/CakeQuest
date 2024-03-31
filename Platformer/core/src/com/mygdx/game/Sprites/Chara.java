@@ -1,4 +1,6 @@
 package com.mygdx.game.Sprites;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -10,7 +12,7 @@ import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.Screens.PlayScreen;
 
 public class Chara extends Sprite {
-    public enum State{Standing, Falling, Jumping, Running};
+    public enum State{Standing, Falling, Jumping, Running, Knocked};
     public State currentState;
     public State previousState;
     public World world;
@@ -18,14 +20,18 @@ public class Chara extends Sprite {
     private TextureRegion charaStand;
     private Animation charaRun;
     private Animation charaJump;
+    private TextureRegion charaKnocks;
+    private Animation charaKnock;
     private boolean runningRight;
     private float stateTimer;
+    private boolean CharaIsKnocked;
+    private PlayScreen screen;
 
 
-    public Chara(World world, PlayScreen screen) {
-        // super(screen.getAtlas().findRegion("Running (32x32)"));
+    public Chara(PlayScreen screen) {
         super(screen.getAtlas().findRegion("chara"));
-        this.world = world;
+        this.screen = screen;
+        this.world = screen.getWorld();
         currentState = State.Standing;
         previousState = State.Standing;
         stateTimer = 0;
@@ -39,6 +45,10 @@ public class Chara extends Sprite {
         for(int i=1; i<9; i++)
             frames.add(new TextureRegion(getTexture(), i*32, 160, 32, 32));
         charaJump = new Animation(0.1f, frames);
+        frames.clear();
+        for(int i=1; i<9; i++)
+            frames.add(new TextureRegion(getTexture(), i*32, 224, 32, 32));
+        charaKnock = new Animation(0.1f, frames);
 
         charaStand = new TextureRegion(getTexture(), 0, 0, 32, 32);
 
@@ -46,15 +56,22 @@ public class Chara extends Sprite {
         setBounds(0, 0, 16/MyGdxGame.PPM, 16/MyGdxGame.PPM);
         setRegion(charaStand);
     }
+
+
     public void update(float dt){
-        setPosition(b2body.getPosition().x-getWidth()/2, b2body.getPosition().y-getHeight()/2);
-        setRegion(getFrame(dt));
+            setPosition(b2body.getPosition().x-getWidth()/2, b2body.getPosition().y-getHeight()/2);
+            setRegion(getFrame(dt));
     }
+
+
     public TextureRegion getFrame(float dt){
         currentState = getState();
 
         TextureRegion region;
         switch(currentState){
+            case Knocked:
+                region = (TextureRegion) charaKnock.getKeyFrame(stateTimer, true);
+                break;
             case Jumping:
                 region = (TextureRegion) charaJump.getKeyFrame(stateTimer);
                 break;
@@ -81,7 +98,9 @@ public class Chara extends Sprite {
     }
 
     public State getState(){
-        if(b2body.getLinearVelocity().y>0)
+        if(CharaIsKnocked)
+            return State.Knocked;
+        else if(b2body.getLinearVelocity().y>0)
             return State.Jumping;
         else if(b2body.getLinearVelocity().y<0)
             return State.Falling;
@@ -98,17 +117,36 @@ public class Chara extends Sprite {
         CircleShape shape = new CircleShape();
         shape.setRadius(7 / MyGdxGame.PPM);
 
+        fdef.filter.categoryBits = MyGdxGame.Chara_Bit;
+        fdef.filter.maskBits = MyGdxGame.Default_Bit | MyGdxGame.Wall_Bit | MyGdxGame.Goal_Bit;
+
         fdef.shape = shape;
         fdef.friction= 0f;
         b2body.createFixture(fdef);
         b2body.setLinearDamping(0f);
         shape.dispose();
 
+        EdgeShape head = new EdgeShape();
+        head.set(new Vector2(7 / MyGdxGame.PPM, 3 / MyGdxGame.PPM), new Vector2(7 / MyGdxGame.PPM, -3 / MyGdxGame.PPM));
+        fdef.shape = head;
+        fdef.isSensor = true;
 
+        b2body.createFixture(fdef).setUserData("head");
 
+        EdgeShape bottom = new EdgeShape();
+        bottom.set(new Vector2(-7 / MyGdxGame.PPM, -6 / MyGdxGame.PPM), new Vector2(7 / MyGdxGame.PPM, -6 / MyGdxGame.PPM));
+        fdef.shape = bottom;
+        fdef.isSensor = true;
 
+        b2body.createFixture(fdef).setUserData("bottom");
 
-
+    }
+    public void knocked(){
+        CharaIsKnocked = true;
+        Gdx.app.log("Knocked", "Wall");
+        Filter filter = new Filter();
+        MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play();
+        //b2body.applyLinearImpulse(new Vector2(0, 2f), b2body.getWorldCenter(), true);
     }
 
 }

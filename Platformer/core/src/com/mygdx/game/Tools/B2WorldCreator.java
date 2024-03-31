@@ -6,11 +6,15 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.Screens.PlayScreen;
 import com.mygdx.game.Sprites.BrittlePlatform;
 import com.mygdx.game.Sprites.Chara;
+import com.mygdx.game.Sprites.Walls;
 
 public class B2WorldCreator {
-    public B2WorldCreator(World world, TiledMap map){
+    public B2WorldCreator(PlayScreen screen){
+        World world = screen.getWorld();
+        TiledMap map = screen.getMap();
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
@@ -30,13 +34,32 @@ public class B2WorldCreator {
 
 
         }
-
-        //for the Brittle Platforms
+        //for the Walls
         for(MapObject object: map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            new BrittlePlatform(world, map, rect);
+            new Walls(screen, rect);
+
+
+
+
+        }
+        //for the Brittle Platforms
+        for(MapObject object: map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            new BrittlePlatform(screen, rect);
+
+
+        }
+        //for the Goal
+        for(MapObject object: map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            new Walls(screen, rect);
+
 
         }
     }
+
 }

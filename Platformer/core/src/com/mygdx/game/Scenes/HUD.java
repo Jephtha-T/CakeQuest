@@ -38,20 +38,30 @@ public class HUD implements Disposable {
         table.top();
         table.setFillParent(true);
         countdownLabel = new Label(String.format("%03d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        scoreLabel = new Label(String.format("%06d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        scoreLabel = new Label(String.format("  ", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         timeLabel = new Label("TIME", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        levelLabel = new Label("1-1", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        levelLabel = new Label("Level-1", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         worldLabel = new Label("World", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         charaLabel = new Label("Chara", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        table.add(charaLabel).expandX().padTop(10);
+        //table.add(charaLabel).expandX().padTop(10);
         table.add(worldLabel).expandX().padTop(10);
         table.add(timeLabel).expandX().padTop(10);
         table.row();
-        table.add(scoreLabel).expandX().top();
+        //table.add(scoreLabel).expandX().top();
         table.add(levelLabel).expandX().top();
         table.add(countdownLabel).expand().top();
 
         stage.addActor(table);
+    }
+
+    public void update(float dt)
+    {
+        timeCount += dt;
+        if(timeCount>=1){
+            worldTimer--;
+            countdownLabel.setText(String.format("%03d", worldTimer));
+            timeCount=0;
+        }
     }
 
     @Override
