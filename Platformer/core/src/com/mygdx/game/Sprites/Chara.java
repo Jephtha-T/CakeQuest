@@ -122,7 +122,7 @@ public class Chara extends Sprite {
 
         fdef.shape = shape;
         fdef.friction= 0f;
-        b2body.createFixture(fdef);
+        b2body.createFixture(fdef).setUserData(this);
         b2body.setLinearDamping(0f);
         shape.dispose();
 
@@ -130,14 +130,12 @@ public class Chara extends Sprite {
         head.set(new Vector2(7 / MyGdxGame.PPM, 3 / MyGdxGame.PPM), new Vector2(7 / MyGdxGame.PPM, -3 / MyGdxGame.PPM));
         fdef.shape = head;
         fdef.isSensor = true;
-
         b2body.createFixture(fdef).setUserData("head");
 
         EdgeShape bottom = new EdgeShape();
-        bottom.set(new Vector2(-7 / MyGdxGame.PPM, -6 / MyGdxGame.PPM), new Vector2(7 / MyGdxGame.PPM, -6 / MyGdxGame.PPM));
+        bottom.set(new Vector2(-3 / MyGdxGame.PPM, -6 / MyGdxGame.PPM), new Vector2(3 / MyGdxGame.PPM, -6 / MyGdxGame.PPM));
         fdef.shape = bottom;
         fdef.isSensor = true;
-
         b2body.createFixture(fdef).setUserData("bottom");
 
     }
@@ -146,7 +144,10 @@ public class Chara extends Sprite {
         Gdx.app.log("Knocked", "Wall");
         Filter filter = new Filter();
         MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play();
-        //b2body.applyLinearImpulse(new Vector2(0, 2f), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(0, 2f), b2body.getWorldCenter(), true);
+    }
+    public void land(){
+        Gdx.app.log("Land", "chara");
     }
 
 }

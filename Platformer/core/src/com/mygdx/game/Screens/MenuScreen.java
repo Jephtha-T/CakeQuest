@@ -94,10 +94,10 @@ public class MenuScreen implements Screen {
         camera.unproject(mousePos);
 
         // Check if the mouse is hovering over the button
-        if (mousePos.x >= playButton.getX() &&
-                mousePos.x <= playButton.getX() + playButton.getWidth() &&
-                mousePos.y >= playButton.getY() &&
-                mousePos.y <= playButton.getY() + playButton.getHeight()) {
+        if ((mousePos.x >= playButton.getX() &&
+                mousePos.x <= playButton.getX() + playButton.getWidth()) &&
+                (mousePos.y >= playButton.getY()+50 &&
+                mousePos.y <= playButton.getY() + playButton.getHeight()-50)) {
             isHovering = true;
             playButton.setTexture(buttonHoverTexture);
         } else {

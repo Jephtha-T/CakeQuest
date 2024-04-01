@@ -30,7 +30,7 @@ import com.mygdx.game.Tools.WorldContactListener;
 
 
 public class PlayScreen implements Screen {
-    private MyGdxGame game;
+    public MyGdxGame game;
     private TextureAtlas atlas;
     private OrthographicCamera gamecam;
     private Viewport gamePort;
@@ -41,7 +41,7 @@ public class PlayScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
     private Chara player;
-    private Music music;
+    public Music music;
     private final float SCREEN_LEFT_BOUND = 2;
     private final float SCREEN_RIGHT_BOUND =10;
     private static final float MAP_SCROLL_SPEED = 1f;
@@ -98,11 +98,13 @@ public class PlayScreen implements Screen {
 
 
     public void handleInput(float dt){
+        float playerSpeed = MAP_SCROLL_SPEED; // Adjust the multiplier as needed
         // Apply gravity
         //System.out.println("Player Velocity: " + player.b2body.getLinearVelocity());
         // Apply gravity
         player.b2body.applyForceToCenter(0, -9.8f, true); // Adjust the gravity force as needed
         if(player.currentState != Chara.State.Knocked) {
+            player.b2body.setLinearVelocity(playerSpeed, player.b2body.getLinearVelocity().y);
             // Jumping
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && Math.abs(player.b2body.getLinearVelocity().y) < 0.01f) // Ensures the player can only jump if it's not already in the air
                 player.b2body.applyLinearImpulse(new Vector2(0, 3.3f), player.b2body.getWorldCenter(), true); // Adjust the impulse for a higher jump
@@ -112,9 +114,8 @@ public class PlayScreen implements Screen {
 
     public void update(float dt) {
         // Adjust the player's horizontal movement speed to match the map scroll speed
-        float playerSpeed = MAP_SCROLL_SPEED; // Adjust the multiplier as needed
         // Apply a constant velocity to the character to make it move horizontally
-        player.b2body.setLinearVelocity(playerSpeed, player.b2body.getLinearVelocity().y);
+        //player.b2body.setLinearVelocity(playerSpeed, player.b2body.getLinearVelocity().y);
         handleInput(dt); // Keep this line if you want to handle jumping
 
         MoveMap(dt);
@@ -122,16 +123,24 @@ public class PlayScreen implements Screen {
         world.step(1 / 60f, 6, 2);
         player.update(dt);
         hud.update(dt);
-
-    }
-
-
-    public void applyKickstartForce() {
-        // Apply a kickstart force to the character if its velocity is below a certain threshold
-        if (player.b2body.getLinearVelocity().x < 1.0f) {
-            player.b2body.applyForceToCenter(2.0f, 0, true); // Kickstart force
+        if(player.b2body.getPosition().x<(gamecam.position.x-(gamePort.getWorldWidth()/2)) || player.b2body.getPosition().y<(gamecam.position.y-(gamePort.getWorldHeight()/2))){
+            //Show GameoverScreen
+            game.setScreen(new MenuScreen((MyGdxGame) game));
+            Gdx.app.log("Chara", "Out of Bounds");
+            music.setLooping(false);
+            music.stop();
         }
+
     }
+
+
+
+//    public void applyKickstartForce() {
+//        // Apply a kickstart force to the character if its velocity is below a certain threshold
+//        if (player.b2body.getLinearVelocity().x < 1.0f) {
+//            player.b2body.applyForceToCenter(2.0f, 0, true); // Kickstart force
+//        }
+//    }
 
 
     public void updateCharacterPosition() {

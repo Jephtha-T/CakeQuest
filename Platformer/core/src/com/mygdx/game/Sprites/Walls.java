@@ -49,17 +49,17 @@ public class Walls extends InteractiveTileObject {
     }
 
 
-    public void knocked(Chara target){
+    public void knocked(){
 
         Gdx.app.log("Knocked", "Wall");
         MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play();
-        //Chara target = new Chara(screen);
+        Chara target = new Chara(screen);
         target.knocked();
     }
 
     @Override
     public void onCollision() {
-        Gdx.app.log("Wall", "Collision");
+        Gdx.app.log("Ground", "Collision");
         //MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play();
 
 

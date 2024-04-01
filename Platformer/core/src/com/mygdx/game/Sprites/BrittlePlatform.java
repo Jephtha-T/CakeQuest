@@ -18,7 +18,7 @@ public class BrittlePlatform extends InteractiveTileObject {
         setCategoryFilter(MyGdxGame.Brick_Bit);
     }
     @Override
-    public void knocked(Chara target) {
+    public void knocked() {
 
     }
     @Override

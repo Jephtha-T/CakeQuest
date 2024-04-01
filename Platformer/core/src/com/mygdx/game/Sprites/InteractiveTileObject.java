@@ -1,5 +1,6 @@
 package com.mygdx.game.Sprites;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -16,12 +17,14 @@ public abstract class InteractiveTileObject extends Sprite {
     protected Fixture fixture;
     protected PlayScreen screen;
     public Body b2body;
+    protected Game game;
 
     public InteractiveTileObject(PlayScreen screen, Rectangle bounds){
         this.world = screen.getWorld();
         this.map = screen.getMap();
         this.bounds = bounds;
         this.screen = screen;
+        this.game = screen.game;
 
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -40,7 +43,7 @@ public abstract class InteractiveTileObject extends Sprite {
 
 
     public abstract void onCollision();
-    public abstract void knocked(Chara target);
+    public abstract void knocked();
     public void setCategoryFilter(short filterBit){
         Filter filter = new Filter();
         filter.categoryBits = filterBit;

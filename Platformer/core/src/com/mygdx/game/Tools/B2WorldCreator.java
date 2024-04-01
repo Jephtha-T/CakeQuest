@@ -9,6 +9,7 @@ import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.Screens.PlayScreen;
 import com.mygdx.game.Sprites.BrittlePlatform;
 import com.mygdx.game.Sprites.Chara;
+import com.mygdx.game.Sprites.Goal;
 import com.mygdx.game.Sprites.Walls;
 
 public class B2WorldCreator {
@@ -22,7 +23,7 @@ public class B2WorldCreator {
 
 
         //for the ground
-        for(MapObject object: map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)){
+        for(MapObject object: map.getLayers().get("Ground").getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             bdef.type = BodyDef.BodyType.StaticBody;
             bdef.position.set((rect.getX()+ rect.getWidth()/2)/ MyGdxGame.PPM, (rect.getY() + rect.getHeight()/2)/MyGdxGame.PPM);
@@ -35,7 +36,7 @@ public class B2WorldCreator {
 
         }
         //for the Walls
-        for(MapObject object: map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)){
+        for(MapObject object: map.getLayers().get("Walls").getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             new Walls(screen, rect);
@@ -45,7 +46,7 @@ public class B2WorldCreator {
 
         }
         //for the Brittle Platforms
-        for(MapObject object: map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)){
+        for(MapObject object: map.getLayers().get("Bricks").getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             new BrittlePlatform(screen, rect);
@@ -53,10 +54,10 @@ public class B2WorldCreator {
 
         }
         //for the Goal
-        for(MapObject object: map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class)){
+        for(MapObject object: map.getLayers().get("Goal").getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            new Walls(screen, rect);
+            new Goal(screen, rect);
 
 
         }

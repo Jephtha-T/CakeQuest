@@ -19,7 +19,7 @@ public class Obstacle extends InteractiveTileObject {
     }
 
     @Override
-    public void knocked(Chara target) {
+    public void knocked() {
 
     }
     @Override
