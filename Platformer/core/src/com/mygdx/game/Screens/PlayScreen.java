@@ -125,7 +125,7 @@ public class PlayScreen implements Screen {
         hud.update(dt);
         if(player.b2body.getPosition().x<(gamecam.position.x-(gamePort.getWorldWidth()/2)) || player.b2body.getPosition().y<(gamecam.position.y-(gamePort.getWorldHeight()/2))){
             //Show GameoverScreen
-            game.setScreen(new GameOverScreen((MyGdxGame) game));
+            game.setScreen(new MenuScreen((MyGdxGame) game));
             Gdx.app.log("Chara", "Out of Bounds");
             music.setLooping(false);
             music.stop();

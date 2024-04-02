@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.Screens.PlayScreen;
 
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class Chara extends Sprite {
@@ -26,6 +27,7 @@ public class Chara extends Sprite {
     private Animation charaKnock;
     private boolean runningRight;
     private float stateTimer;
+    private float settime;
     private boolean CharaIsKnocked;
     private PlayScreen screen;
 
@@ -86,14 +88,14 @@ public class Chara extends Sprite {
                 region = charaStand;
                 break;
         }
-        if((b2body.getLinearVelocity().x<0 || !runningRight) && !region.isFlipX()){
-            region.flip(true, false);
-            runningRight= false;
-        }
-        else if((b2body.getLinearVelocity().x>0 || !runningRight) && region.isFlipX()){
-            region.flip(true, false);
-            runningRight = true;
-        }
+//        if((b2body.getLinearVelocity().x<0 || !runningRight) && !region.isFlipX()){
+//            region.flip(true, false);
+//            runningRight= false;
+//        }
+//        else if((b2body.getLinearVelocity().x>0 || !runningRight) && region.isFlipX()){
+//            region.flip(true, false);
+//            runningRight = true;
+//        }
         stateTimer = currentState == previousState ? stateTimer+dt:0;
         previousState = currentState;
         return region;
@@ -147,15 +149,30 @@ public class Chara extends Sprite {
         Gdx.app.log("Knocked", "Wall");
         Filter filter = new Filter();
         MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play();
-        b2body.applyLinearImpulse(new Vector2(-1.5f, 1f), b2body.getWorldCenter(), true);
-        TimeUnit.SECONDS.sleep(1);
-        CharaIsKnocked = false;
+        b2body.applyLinearImpulse(new Vector2(-1.5f, 0.5f), b2body.getWorldCenter(), true);
+        //TimeUnit.SECONDS.sleep(1);
+//        settime = stateTimer;
+//        if(settime==stateTimer-1)
+//            CharaIsKnocked=false;
+        new java.util.Timer().schedule(new TimerTask(){
+            @Override
+            public void run() {
+                CharaIsKnocked=false;
+                new java.util.Timer().schedule(new TimerTask(){
+                    @Override
+                    public void run() {
+                b2body.applyLinearImpulse(new Vector2(0.5f, 0.0f), b2body.getWorldCenter(), true);
+                    }
+                },1000,1000);
+                //your code here
+                //1000*5=5000 millisec. i.e. 5 seconds. you can change accordingly
+            }
+        },500,500);
+
         //b2body.applyLinearImpulse(new Vector2(-1.5f, 1f), b2body.getWorldCenter(), true);
 
         
     }
-    public void land(){
-        Gdx.app.log("Land", "chara");
-    }
+
 
 }
