@@ -28,12 +28,23 @@ public class WorldContactListener implements ContactListener {
             if(fixA.getUserData()=="head" && fixB.getFilterData().categoryBits == MyGdxGame.Wall_Bit){
                 Gdx.app.log("Chara", fixA.getUserData().toString());
                 Gdx.app.log("Wall", fixB.getUserData().toString());
+                Gdx.app.log("Wall", fixA.getUserData().toString());
                 //((Chara) fixA.getUserData()).land();
+                try {
+                    ((InteractiveTileObject ) fixB.getUserData()).knocked();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
             else if(fixB.getUserData()=="head" && fixA.getFilterData().categoryBits == MyGdxGame.Wall_Bit){
                 Gdx.app.log("Chara", fixB.getUserData().toString());
                 Gdx.app.log("Wall", fixA.getUserData().toString());
                 //((Chara) fixB.getUserData()).land();
+                try {
+                    ((InteractiveTileObject ) fixA.getUserData()).knocked();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
             break;
             case MyGdxGame.Goal_Bit | MyGdxGame.Chara_Bit:
@@ -45,10 +56,19 @@ public class WorldContactListener implements ContactListener {
                 break;
             case MyGdxGame.Obstacle_Bit | MyGdxGame.Chara_Bit:
                 if(fixA.getFilterData().categoryBits == MyGdxGame.Obstacle_Bit) {
-                    ((InteractiveTileObject) fixA.getUserData()).knocked();
+                    try {
+                        ((InteractiveTileObject) fixA.getUserData()).knocked();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-                else if(fixB.getFilterData().categoryBits == MyGdxGame.Obstacle_Bit)
-                    ((InteractiveTileObject)fixB.getUserData()).knocked();
+                else if(fixB.getFilterData().categoryBits == MyGdxGame.Obstacle_Bit) {
+                    try {
+                        ((InteractiveTileObject)fixB.getUserData()).knocked();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
                 break;
             case MyGdxGame.Brick_Bit | MyGdxGame.Chara_Bit:
                 if(fixA.getUserData()=="bottom" && fixB.getFilterData().categoryBits == MyGdxGame.Brick_Bit)

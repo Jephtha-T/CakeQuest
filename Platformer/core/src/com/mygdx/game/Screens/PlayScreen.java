@@ -40,7 +40,7 @@ public class PlayScreen implements Screen {
     private OrthogonalTiledMapRenderer renderer;
     private World world;
     private Box2DDebugRenderer b2dr;
-    private Chara player;
+    public Chara player;
     public Music music;
     private final float SCREEN_LEFT_BOUND = 2;
     private final float SCREEN_RIGHT_BOUND =10;
@@ -106,8 +106,8 @@ public class PlayScreen implements Screen {
         if(player.currentState != Chara.State.Knocked) {
             player.b2body.setLinearVelocity(playerSpeed, player.b2body.getLinearVelocity().y);
             // Jumping
-            if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && Math.abs(player.b2body.getLinearVelocity().y) < 0.01f) // Ensures the player can only jump if it's not already in the air
-                player.b2body.applyLinearImpulse(new Vector2(0, 3.3f), player.b2body.getWorldCenter(), true); // Adjust the impulse for a higher jump
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && Math.abs(player.b2body.getLinearVelocity().y) < 0.01f) // Ensures the player can only jump if it's not already in the air
+            player.b2body.applyLinearImpulse(new Vector2(0, 3.3f), player.b2body.getWorldCenter(), true); // Adjust the impulse for a higher jump
         }
     }
 
@@ -125,7 +125,7 @@ public class PlayScreen implements Screen {
         hud.update(dt);
         if(player.b2body.getPosition().x<(gamecam.position.x-(gamePort.getWorldWidth()/2)) || player.b2body.getPosition().y<(gamecam.position.y-(gamePort.getWorldHeight()/2))){
             //Show GameoverScreen
-            game.setScreen(new MenuScreen((MyGdxGame) game));
+            game.setScreen(new GameOverScreen((MyGdxGame) game));
             Gdx.app.log("Chara", "Out of Bounds");
             music.setLooping(false);
             music.stop();

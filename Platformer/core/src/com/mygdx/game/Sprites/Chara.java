@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.Screens.PlayScreen;
 
+import java.util.concurrent.TimeUnit;
+
 public class Chara extends Sprite {
     public enum State{Standing, Falling, Jumping, Running, Knocked};
     public State currentState;
@@ -139,12 +141,18 @@ public class Chara extends Sprite {
         b2body.createFixture(fdef).setUserData("bottom");
 
     }
-    public void knocked(){
+    public void knocked() throws InterruptedException {
         CharaIsKnocked = true;
+
         Gdx.app.log("Knocked", "Wall");
         Filter filter = new Filter();
         MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play();
-        b2body.applyLinearImpulse(new Vector2(0, 2f), b2body.getWorldCenter(), true);
+        b2body.applyLinearImpulse(new Vector2(-1.5f, 1f), b2body.getWorldCenter(), true);
+        TimeUnit.SECONDS.sleep(1);
+        CharaIsKnocked = false;
+        //b2body.applyLinearImpulse(new Vector2(-1.5f, 1f), b2body.getWorldCenter(), true);
+
+        
     }
     public void land(){
         Gdx.app.log("Land", "chara");

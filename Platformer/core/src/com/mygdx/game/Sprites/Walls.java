@@ -49,12 +49,13 @@ public class Walls extends InteractiveTileObject {
     }
 
 
-    public void knocked(){
+    public void knocked() throws InterruptedException {
 
         Gdx.app.log("Knocked", "Wall");
         MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play();
-        Chara target = new Chara(screen);
-        target.knocked();
+        Chara player;
+        player = screen.player;
+        player.knocked();
     }
 
     @Override

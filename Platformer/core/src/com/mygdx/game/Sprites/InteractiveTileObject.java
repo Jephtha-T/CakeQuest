@@ -43,7 +43,7 @@ public abstract class InteractiveTileObject extends Sprite {
 
 
     public abstract void onCollision();
-    public abstract void knocked();
+    public abstract void knocked() throws InterruptedException;
     public void setCategoryFilter(short filterBit){
         Filter filter = new Filter();
         filter.categoryBits = filterBit;
