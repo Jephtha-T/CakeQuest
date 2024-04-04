@@ -96,5 +96,8 @@ public class RollingObstacle extends Obstacle {
         player.knocked();
         setToDestroy = true;
     }
+    public void destroy() {
+        setToDestroy = true;
+    }
 
 }

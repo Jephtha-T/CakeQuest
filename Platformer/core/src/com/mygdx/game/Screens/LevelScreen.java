@@ -143,6 +143,12 @@ public class LevelScreen implements Screen {
             music.setLooping(false);
             music.stop();
         }
+        if (Gdx.input.justTouched() && isLevelHovering[1]) {
+            // Button is pressed, transition to PlayScreen
+            game.setScreen(new PlayScreen((MyGdxGame) game, "Level_2.tmx")); // Cast the game instance to MyGdxGame
+            music.setLooping(false);
+            music.stop();
+        }
     }
 
     @Override

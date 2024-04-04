@@ -8,10 +8,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.Screens.MenuScreen;
 import com.mygdx.game.Screens.PlayScreen;
-import com.mygdx.game.Sprites.Chara;
-import com.mygdx.game.Sprites.InteractiveTileObject;
-import com.mygdx.game.Sprites.Obstacle;
-import com.mygdx.game.Sprites.Walls;
+import com.mygdx.game.Sprites.*;
 
 public class WorldContactListener implements ContactListener {
     public Game game;
@@ -54,7 +51,8 @@ public class WorldContactListener implements ContactListener {
             case MyGdxGame.Obstacle_Bit | MyGdxGame.Chara_Bit:
                 if(fixA.getUserData()=="head" && fixA.getFilterData().categoryBits == MyGdxGame.Obstacle_Bit) {
                     try {
-                        ((Obstacle) fixA.getUserData()).hit();
+                        ((Chara) fixB.getUserData()).knocked();
+                        ((Obstacle) fixA.getUserData()).destroy();
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -62,7 +60,8 @@ public class WorldContactListener implements ContactListener {
                 }
                 else if(fixB.getUserData()=="head" && fixB.getFilterData().categoryBits == MyGdxGame.Obstacle_Bit) {
                     try {
-                        ((Obstacle)fixB.getUserData()).hit();
+                        ((Chara)fixA.getUserData()).knocked();
+                        ((Obstacle) fixB.getUserData()).destroy();
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
