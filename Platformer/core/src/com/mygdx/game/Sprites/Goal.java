@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.Screens.LevelCompleteScreen;
 import com.mygdx.game.Screens.MenuScreen;
 import com.mygdx.game.Screens.PlayScreen;
 
@@ -36,7 +37,7 @@ public class Goal extends InteractiveTileObject {
         game = screen.game;
         Music music;
         music = screen.music;
-        game.setScreen(new MenuScreen((MyGdxGame) game));
+        game.setScreen(new LevelCompleteScreen((MyGdxGame) game, screen.levelname));
         music.setLooping(false);
         music.stop();
 

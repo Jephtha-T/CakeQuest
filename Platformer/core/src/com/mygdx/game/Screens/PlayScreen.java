@@ -25,6 +25,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.Sprites.Obstacle;
 import com.mygdx.game.Tools.B2WorldCreator;
 import com.mygdx.game.Tools.WorldContactListener;
 
@@ -40,15 +41,17 @@ public class PlayScreen implements Screen {
     private OrthogonalTiledMapRenderer renderer;
     private World world;
     private Box2DDebugRenderer b2dr;
+    private B2WorldCreator creator;
     public Chara player;
     public Music music;
     private final float SCREEN_LEFT_BOUND = 2;
     private final float SCREEN_RIGHT_BOUND =10;
     private static final float MAP_SCROLL_SPEED = 1f;
     private boolean canJump = true;
+    public String levelname;
 
-
-    public PlayScreen(MyGdxGame game){ //Constructor
+    public PlayScreen(MyGdxGame game, String level){ //Constructor
+        levelname = level;
         atlas = new TextureAtlas("CharaSprites/Chara.atlas");
         this.game = game;
         gamecam = new OrthographicCamera();
@@ -56,13 +59,13 @@ public class PlayScreen implements Screen {
         hud = new HUD(game.batch);
 
         maploader = new TmxMapLoader();
-        map = maploader.load("Level_1.tmx");
+        map = maploader.load(level);
         renderer = new OrthogonalTiledMapRenderer(map, 1/MyGdxGame.PPM);
         gamecam.position.set(gamePort.getWorldWidth()/2 , gamePort.getWorldHeight()/2, 0);
         world = new World(new Vector2(0, -10/ MyGdxGame.PPM), true);
         b2dr = new Box2DDebugRenderer();
         player = new Chara(this);
-        new B2WorldCreator(this);
+        creator = new B2WorldCreator(this);
 
         world.setContactListener(new WorldContactListener());
 
@@ -122,14 +125,14 @@ public class PlayScreen implements Screen {
         updateCharacterPosition();
         world.step(1 / 60f, 6, 2);
         player.update(dt);
-        hud.update(dt);
-        if(player.b2body.getPosition().x<(gamecam.position.x-(gamePort.getWorldWidth()/2)) || player.b2body.getPosition().y<(gamecam.position.y-(gamePort.getWorldHeight()/2))){
-            //Show GameoverScreen
-            game.setScreen(new MenuScreen((MyGdxGame) game));
-            Gdx.app.log("Chara", "Out of Bounds");
-            music.setLooping(false);
-            music.stop();
+        for(Obstacle obstacle : creator.getObstacles()) {
+            obstacle.update(dt);
+            if (obstacle.getX() < player.getX() + 224 / MyGdxGame.PPM) {
+                obstacle.b2body.setActive(true);
+            }
         }
+        hud.update(dt);
+
 
     }
 
@@ -170,13 +173,28 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
         player.draw(game.batch);
+        for(Obstacle obstacle : creator.getObstacles())
+            obstacle.draw(game.batch);
         game.batch.end();
         //Set batch to draw what the HUD Camera sees
         game.batch.setProjectionMatrix(HUD.stage.getCamera().combined);
         hud.stage.draw();
+        if(gameOver()){
+            //Show GameoverScreen
+            game.setScreen(new GameOverScreen((MyGdxGame) game, levelname));
+            Gdx.app.log("Chara", "Out of Bounds");
+            music.setLooping(false);
+            music.stop();
+            dispose();
+        }
 
     }
-
+    public boolean gameOver(){
+        if(player.b2body.getPosition().x<(gamecam.position.x-(gamePort.getWorldWidth()/2)) || player.b2body.getPosition().y<(gamecam.position.y-(gamePort.getWorldHeight()/2))){
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public void resize(int width, int height) {
@@ -212,6 +230,7 @@ public class PlayScreen implements Screen {
         renderer.dispose();
         world.dispose();
         b2dr.dispose();
+        hud.dispose();
     }
 
 }

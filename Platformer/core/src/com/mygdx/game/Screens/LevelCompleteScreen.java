@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
-public class GameOverScreen implements Screen {
+public class LevelCompleteScreen implements Screen {
     private Game game;
     private SpriteBatch batch;
     private Sprite splash;
@@ -28,7 +28,7 @@ public class GameOverScreen implements Screen {
     private Music music;
     public String levelname;
 
-    public GameOverScreen(Game game, String level) {
+    public LevelCompleteScreen(Game game, String level) {
         this.game = game;
         levelname = level;
     }
@@ -46,7 +46,7 @@ public class GameOverScreen implements Screen {
         music.play();
 
         // Load textures
-        Texture splashTexture = new Texture("Menu/GameOverbg.jpg");
+        Texture splashTexture = new Texture("Menu/LevelCompletebg.jpg");
         buttonTexture = new Texture("Menu/replaybtn.png");
         buttonHoverTexture = new Texture("Menu/replaybtn_hover.png");
 

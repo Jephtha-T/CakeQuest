@@ -34,7 +34,7 @@ prettyPrint=false
 legacyOutput=false
 
 scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
-inputFiles=[{path:Split Assets/chara.png,type:Input,regionName:null}]
+inputFiles=[{path:Split Assets/chara.png,type:Input,regionName:null},{path:Rocky Roads/Enemies/bullet.png,type:Input,regionName:null}]
 keepInputFileExtensions=false
 
 

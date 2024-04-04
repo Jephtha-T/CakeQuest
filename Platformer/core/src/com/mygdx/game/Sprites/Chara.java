@@ -43,18 +43,18 @@ public class Chara extends Sprite {
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
         for(int i=1; i<8; i++)
-            frames.add(new TextureRegion(getTexture(), i*32, 96, 32, 32));
+            frames.add(new TextureRegion(getTexture(), i*32, 96+16, 32, 32));
         charaRun= new Animation(0.1f,frames);
         frames.clear();
         for(int i=1; i<9; i++)
-            frames.add(new TextureRegion(getTexture(), i*32, 160, 32, 32));
+            frames.add(new TextureRegion(getTexture(), i*32, 160+16, 32, 32));
         charaJump = new Animation(0.1f, frames);
         frames.clear();
         for(int i=1; i<9; i++)
-            frames.add(new TextureRegion(getTexture(), i*32, 224, 32, 32));
+            frames.add(new TextureRegion(getTexture(), i*32, 224+16, 32, 32));
         charaKnock = new Animation(0.1f, frames);
 
-        charaStand = new TextureRegion(getTexture(), 0, 0, 32, 32);
+        charaStand = new TextureRegion(getTexture(), 0, 0+16, 32, 32);
 
         defineChara();
         setBounds(0, 0, 16/MyGdxGame.PPM, 16/MyGdxGame.PPM);
@@ -122,7 +122,7 @@ public class Chara extends Sprite {
         shape.setRadius(7 / MyGdxGame.PPM);
 
         fdef.filter.categoryBits = MyGdxGame.Chara_Bit;
-        fdef.filter.maskBits = MyGdxGame.Default_Bit | MyGdxGame.Wall_Bit | MyGdxGame.Goal_Bit;
+        fdef.filter.maskBits = MyGdxGame.Default_Bit | MyGdxGame.Wall_Bit | MyGdxGame.Goal_Bit | MyGdxGame.Obstacle_Bit;
 
         fdef.shape = shape;
         fdef.friction= 0f;

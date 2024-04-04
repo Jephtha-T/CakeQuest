@@ -1,5 +1,7 @@
 Chara.png
 size:256,512
 repeat:none
+bullet
+bounds:0,0,16,16
 chara
-bounds:0,0,256,288
+bounds:0,16,256,288

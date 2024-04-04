@@ -5,15 +5,16 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.Screens.PlayScreen;
-import com.mygdx.game.Sprites.BrittlePlatform;
-import com.mygdx.game.Sprites.Chara;
-import com.mygdx.game.Sprites.Goal;
-import com.mygdx.game.Sprites.Walls;
+import com.mygdx.game.Sprites.*;
 
 public class B2WorldCreator {
+    private Array<RollingObstacle> Rolls;
+
     public B2WorldCreator(PlayScreen screen){
+
         World world = screen.getWorld();
         TiledMap map = screen.getMap();
         BodyDef bdef = new BodyDef();
@@ -59,8 +60,22 @@ public class B2WorldCreator {
 
             new Goal(screen, rect);
 
+        }
+        Rolls = new Array<RollingObstacle>();
+        for(MapObject object: map.getLayers().get("Obstacles").getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            Rolls.add(new RollingObstacle(screen, rect.getX()/MyGdxGame.PPM, rect.getY()/MyGdxGame.PPM));
+
 
         }
+    }
+    public Array<RollingObstacle> getRolls() {
+        return Rolls;
+    }
+    public Array<Obstacle> getObstacles(){
+        Array<Obstacle> obstacles = new Array<Obstacle>();
+        obstacles.addAll(Rolls);
+        return obstacles;
     }
 
 }
