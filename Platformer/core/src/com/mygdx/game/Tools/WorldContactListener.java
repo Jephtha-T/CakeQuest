@@ -49,24 +49,29 @@ public class WorldContactListener implements ContactListener {
 
             //Obstacle Collision
             case MyGdxGame.Obstacle_Bit | MyGdxGame.Chara_Bit:
-                if(fixA.getUserData()=="head" && fixA.getFilterData().categoryBits == MyGdxGame.Obstacle_Bit) {
+                if(fixB.getUserData()=="head" && fixA.getFilterData().categoryBits == MyGdxGame.Obstacle_Bit) {
                     try {
-                        ((Chara) fixB.getUserData()).knocked();
-                        ((Obstacle) fixA.getUserData()).destroy();
+                        ((Obstacle) fixA.getUserData()).hit();
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
 
                 }
-                else if(fixB.getUserData()=="head" && fixB.getFilterData().categoryBits == MyGdxGame.Obstacle_Bit) {
+                else if(fixA.getUserData()=="head" && fixB.getFilterData().categoryBits == MyGdxGame.Obstacle_Bit) {
                     try {
-                        ((Chara)fixA.getUserData()).knocked();
-                        ((Obstacle) fixB.getUserData()).destroy();
+                        ((Obstacle) fixB.getUserData()).hit();
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                 }
+                else if(fixA.getFilterData().categoryBits == MyGdxGame.Obstacle_Bit) {
+                    ((Obstacle) fixA.getUserData()).destroy();
+                }
+                else if(fixB.getFilterData().categoryBits == MyGdxGame.Obstacle_Bit) {
+                    ((Obstacle) fixB.getUserData()).destroy();
+                }
                 break;
+
 
             //Brittle Brick Interaction
             case MyGdxGame.Brick_Bit | MyGdxGame.Chara_Bit:

@@ -181,11 +181,17 @@ public class PlayScreen implements Screen {
         hud.stage.draw();
         if(gameOver()){
             //Show GameoverScreen
-            game.setScreen(new GameOverScreen((MyGdxGame) game, levelname));
             Gdx.app.log("Chara", "Out of Bounds");
             music.setLooping(false);
             music.stop();
             dispose();
+            game.setScreen(new GameOverScreen((MyGdxGame) game, levelname));
+
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            // Switch to the pause menu screen
+            game.setPreviousScreen(this);
+            game.setScreen(new PauseScreen(game));
         }
 
     }

@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -22,9 +23,11 @@ public class MyGdxGame extends Game {
 	public static final short Goal_Bit = 16;
 	public static final short Destroyed_Bit = 32;
 	public static final short Obstacle_Bit = 64;
+	public static final short Obstacle_Head_Bit = 128;
 	public SpriteBatch batch; //Import all resources
 
 	public static AssetManager manager;
+	private Screen previousScreen;
 
 	@Override
 	public void create () {
@@ -53,5 +56,11 @@ public class MyGdxGame extends Game {
 	{
 		super.render(); //Get the current screen to render
 
+	}
+	public void setPreviousScreen(Screen previousScreen) {
+		this.previousScreen = previousScreen;
+	}
+	public Screen getPreviousScreen() {
+		return previousScreen;
 	}
 }

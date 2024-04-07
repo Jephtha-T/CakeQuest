@@ -49,7 +49,7 @@ public class RollingObstacle extends Obstacle {
         b2body = world.createBody(bdef);
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(6 / MyGdxGame.PPM);
+        shape.setRadius(5 / MyGdxGame.PPM);
         fdef.filter.categoryBits = MyGdxGame.Obstacle_Bit;
         fdef.filter.maskBits = MyGdxGame.Chara_Bit |
                 MyGdxGame.Wall_Bit |
@@ -58,24 +58,6 @@ public class RollingObstacle extends Obstacle {
 
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
-        EdgeShape head = new EdgeShape();
-        head.set(new Vector2(-7 / MyGdxGame.PPM, 3 / MyGdxGame.PPM), new Vector2(-7 / MyGdxGame.PPM, -3 / MyGdxGame.PPM));
-        fdef.shape = head;
-        fdef.isSensor = true;
-        b2body.createFixture(fdef).setUserData("head");
-        //Create the Head here:
-//        PolygonShape head = new PolygonShape();
-//        Vector2[] vertice = new Vector2[4];
-//        vertice[0] = new Vector2(-5, 8).scl(1 / MyGdxGame.PPM);
-//        vertice[1] = new Vector2(5, 8).scl(1 / MyGdxGame.PPM);
-//        vertice[2] = new Vector2(-3, 3).scl(1 / MyGdxGame.PPM);
-//        vertice[3] = new Vector2(3, 3).scl(1 / MyGdxGame.PPM);
-//        head.set(vertice);
-//
-//        fdef.shape = head;
-//        fdef.restitution = 0.5f;
-//        fdef.filter.categoryBits = MyGdxGame.Obstacle_Bit;
-//        b2body.createFixture(fdef).setUserData(this);
     }
     public void draw(Batch batch){
         if(!destroyed)
