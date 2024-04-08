@@ -164,8 +164,7 @@ public class Chara extends Sprite {
                 b2body.applyLinearImpulse(new Vector2(0.5f, 0.0f), b2body.getWorldCenter(), true);
                     }
                 },1000,1000);
-                //your code here
-                //1000*5=5000 millisec. i.e. 5 seconds. you can change accordingly
+
             }
         },500,500);
 
