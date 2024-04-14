@@ -20,9 +20,17 @@ public class GameOverScreen implements Screen {
     private SpriteBatch batch;
     private Sprite splash;
     private Sprite playButton;
+    private Sprite LevelButton;
+    private Sprite MainButton;
     private Texture buttonTexture;
     private Texture buttonHoverTexture;
-    private boolean isHovering;
+    private Texture LevelbuttonTexture;
+    private Texture LevelbuttonHoverTexture;
+    private Texture MainbuttonTexture;
+    private Texture MainbuttonHoverTexture;
+    private boolean PlayisHovering;
+    private boolean LevelisHovering;
+    private boolean MainisHovering;
     private Viewport viewport;
     private Camera camera;
     private Music music;
@@ -49,22 +57,39 @@ public class GameOverScreen implements Screen {
         Texture splashTexture = new Texture("Menu/GameOverbg.jpg");
         buttonTexture = new Texture("Menu/replaybtn.png");
         buttonHoverTexture = new Texture("Menu/replaybtn_hover.png");
+        LevelbuttonTexture = new Texture("Menu/replaybtn.png");
+        LevelbuttonHoverTexture = new Texture("Menu/replaybtn_hover.png");
+        MainbuttonTexture = new Texture("Menu/replaybtn.png");
+        MainbuttonHoverTexture = new Texture("Menu/replaybtn_hover.png");
 
         // Create sprites
         splash = new Sprite(splashTexture);
         splash.setSize(MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT); // Use predefined dimensions
 
         playButton = new Sprite(buttonTexture);
+        LevelButton = new Sprite(LevelbuttonTexture);
+        MainButton = new Sprite(MainbuttonTexture);
 
         // Set the size of the button
         float buttonWidth = 150; // Adjust the width as needed
         float buttonHeight = 150; // Increase the height as needed
         playButton.setSize(buttonWidth, buttonHeight);
+        LevelButton.setSize(buttonWidth, buttonHeight);
+        MainButton.setSize(buttonWidth, buttonHeight);
+
 
         // Position the button in the middle of the screen
         playButton.setPosition(
                 (MyGdxGame.V_WIDTH - playButton.getWidth()) / 2,
                 MyGdxGame.V_HEIGHT / 5 - playButton.getHeight() / 2 // Center vertically
+        );
+        LevelButton.setPosition(
+                (MyGdxGame.V_WIDTH - playButton.getWidth()) / 2,
+                (MyGdxGame.V_HEIGHT / 5 - playButton.getHeight() / 2) - 150 // Center vertically
+        );
+        MainButton.setPosition(
+                (MyGdxGame.V_WIDTH - playButton.getWidth()) / 2,
+                (MyGdxGame.V_HEIGHT / 5 - playButton.getHeight() / 2) - 300 // Center vertically
         );
     }
 
@@ -75,6 +100,10 @@ public class GameOverScreen implements Screen {
         splash.getTexture().dispose();
         playButton.getTexture().dispose();
         buttonHoverTexture.dispose();
+        LevelButton.getTexture().dispose();
+        LevelbuttonHoverTexture.dispose();
+        MainButton.getTexture().dispose();
+        MainbuttonHoverTexture.dispose();
     }
 
     @Override
@@ -100,22 +129,56 @@ public class GameOverScreen implements Screen {
                 mousePos.x <= playButton.getX() + playButton.getWidth()) &&
                 (mousePos.y >= playButton.getY()+50 &&
                         mousePos.y <= playButton.getY() + playButton.getHeight()-50)) {
-            isHovering = true;
+            PlayisHovering = true;
             playButton.setTexture(buttonHoverTexture);
         } else {
-            isHovering = false;
+            PlayisHovering = false;
             playButton.setTexture(buttonTexture);
         }
 
         playButton.draw(batch);
+
+        if ((mousePos.x >= LevelButton.getX() &&
+                mousePos.x <= LevelButton.getX() + LevelButton.getWidth()) &&
+                (mousePos.y >= LevelButton.getY()+50 &&
+                        mousePos.y <= LevelButton.getY() + LevelButton.getHeight()-50)) {
+            LevelisHovering = true;
+            LevelButton.setTexture(LevelbuttonHoverTexture);
+        } else {
+            LevelisHovering = false;
+            LevelButton.setTexture(LevelbuttonTexture);
+        }
+
+        LevelButton.draw(batch);
+
+        if ((mousePos.x >= MainButton.getX() &&
+                mousePos.x <= MainButton.getX() + MainButton.getWidth()) &&
+                (mousePos.y >= MainButton.getY()+50 &&
+                        mousePos.y <= MainButton.getY() + MainButton.getHeight()-50)) {
+            MainisHovering = true;
+            MainButton.setTexture(MainbuttonHoverTexture);
+        } else {
+            MainisHovering = false;
+            MainButton.setTexture(MainbuttonTexture);
+        }
+
+        MainButton.draw(batch);
         batch.end();
 
         // Handle input
-        if (Gdx.input.justTouched() && isHovering) {
+        if (Gdx.input.justTouched() && PlayisHovering) {
             // Button is pressed, transition to PlayScreen
             game.setScreen(new PlayScreen((MyGdxGame) game, levelname)); // Cast the game instance to MyGdxGame
             music.setLooping(false);
             music.stop();
+        }
+        else if (Gdx.input.justTouched() && LevelisHovering) {
+            // Button is pressed, transition to PlayScreen
+            goToLevelSelect();
+        }
+        else if (Gdx.input.justTouched() && MainisHovering) {
+            // Button is pressed, transition to PlayScreen
+            goToMainMenu();
         }
     }
 
@@ -129,5 +192,16 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void hide(){
+    }
+    private void goToMainMenu() {
+        game.setScreen(new MenuScreen(game));
+        music.setLooping(false);
+        music.stop();
+    }
+
+    private void goToLevelSelect() {
+        game.setScreen(new LevelScreen(game));
+        music.setLooping(false);
+        music.stop();
     }
 }
