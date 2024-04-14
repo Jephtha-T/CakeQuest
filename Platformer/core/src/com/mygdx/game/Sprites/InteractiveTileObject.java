@@ -50,7 +50,7 @@ public abstract class InteractiveTileObject extends Sprite {
         fixture.setFilterData(filter);
     }
     public TiledMapTileLayer.Cell getCell(){
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(2);
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("Graphics");
         return layer.getCell((int)(body.getPosition().x * MyGdxGame.PPM / 16), (int)(body.getPosition().y * MyGdxGame.PPM / 16));
     }
 }

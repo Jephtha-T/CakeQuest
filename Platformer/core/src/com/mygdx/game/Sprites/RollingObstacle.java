@@ -66,7 +66,7 @@ public class RollingObstacle extends Obstacle {
 
     @Override
     public void miss() {
-        reverseVelocity(true, false);
+        setToDestroy = true;
     }
 
     @Override

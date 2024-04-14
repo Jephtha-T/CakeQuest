@@ -3,6 +3,7 @@ package com.mygdx.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -32,6 +33,7 @@ public class PauseScreen implements Screen {
     private boolean isLevelSelectHovering;
     private static final float BUTTON_WIDTH = 65; // Adjust as needed
     private static final float BUTTON_HEIGHT = 65; // Adjust as needed
+
 
     public PauseScreen(MyGdxGame game) {
         this.game = game;
@@ -218,10 +220,12 @@ public class PauseScreen implements Screen {
 
     private void goToMainMenu() {
         game.setScreen(new MenuScreen(game));
+
     }
 
     private void goToLevelSelect() {
         game.setScreen(new LevelScreen(game));
+
     }
 }
 

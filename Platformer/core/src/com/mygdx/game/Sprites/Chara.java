@@ -122,7 +122,7 @@ public class Chara extends Sprite {
         shape.setRadius(7 / MyGdxGame.PPM);
 
         fdef.filter.categoryBits = MyGdxGame.Chara_Bit;
-        fdef.filter.maskBits = MyGdxGame.Default_Bit | MyGdxGame.Wall_Bit | MyGdxGame.Goal_Bit | MyGdxGame.Obstacle_Bit;
+        fdef.filter.maskBits = MyGdxGame.Default_Bit | MyGdxGame.Wall_Bit | MyGdxGame.Goal_Bit | MyGdxGame.Obstacle_Bit| MyGdxGame.Brick_Bit;
 
         fdef.shape = shape;
         fdef.friction= 0f;

@@ -10,6 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.Screens.PlayScreen;
+
+import static com.mygdx.game.Screens.PlayScreen.levelname;
 
 public class HUD implements Disposable {
     public static Stage stage;
@@ -18,6 +21,7 @@ public class HUD implements Disposable {
     private Integer worldTimer;
     private float timeCount;
     private Integer score;
+    private String level;
 
     Label countdownLabel;
     Label scoreLabel;
@@ -30,6 +34,7 @@ public class HUD implements Disposable {
         worldTimer = 300;
         timeCount = 0;
         score = 0;
+        level = levelname.substring(0, levelname.length() - 4);
 
         viewport = new FitViewport(MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
@@ -40,7 +45,7 @@ public class HUD implements Disposable {
         countdownLabel = new Label(String.format("%03d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         scoreLabel = new Label(String.format("  ", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         timeLabel = new Label("TIME", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        levelLabel = new Label("Level-1", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        levelLabel = new Label(level, new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         worldLabel = new Label("World", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         charaLabel = new Label("Chara", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         //table.add(charaLabel).expandX().padTop(10);

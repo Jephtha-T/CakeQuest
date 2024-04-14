@@ -48,7 +48,7 @@ public class PlayScreen implements Screen {
     private final float SCREEN_RIGHT_BOUND =10;
     private static final float MAP_SCROLL_SPEED = 1f;
     private boolean canJump = true;
-    public String levelname;
+    public static String levelname;
 
     public PlayScreen(MyGdxGame game, String level){ //Constructor
         levelname = level;
@@ -127,7 +127,7 @@ public class PlayScreen implements Screen {
         player.update(dt);
         for(Obstacle obstacle : creator.getObstacles()) {
             obstacle.update(dt);
-            if (obstacle.getX() < player.getX() + 224 / MyGdxGame.PPM) {
+            if (obstacle.getX() < player.getX() + 256 / MyGdxGame.PPM) {
                 obstacle.b2body.setActive(true);
             }
         }
@@ -185,6 +185,7 @@ public class PlayScreen implements Screen {
             music.setLooping(false);
             music.stop();
             dispose();
+            game.setPreviousScreen(this);
             game.setScreen(new GameOverScreen((MyGdxGame) game, levelname));
 
         }
