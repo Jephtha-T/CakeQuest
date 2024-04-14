@@ -54,6 +54,13 @@ public class B2WorldCreator {
 
 
         }
+        for(MapObject object: map.getLayers().get("Spikes").getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            new SpikeObstacle(screen, rect);
+
+
+        }
         //for the Goal
         for(MapObject object: map.getLayers().get("Goal").getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();

@@ -122,7 +122,7 @@ public class Chara extends Sprite {
         shape.setRadius(7 / MyGdxGame.PPM);
 
         fdef.filter.categoryBits = MyGdxGame.Chara_Bit;
-        fdef.filter.maskBits = MyGdxGame.Default_Bit | MyGdxGame.Wall_Bit | MyGdxGame.Goal_Bit | MyGdxGame.Obstacle_Bit| MyGdxGame.Brick_Bit;
+        fdef.filter.maskBits = MyGdxGame.Default_Bit | MyGdxGame.Wall_Bit | MyGdxGame.Goal_Bit | MyGdxGame.Obstacle_Bit| MyGdxGame.Brick_Bit| MyGdxGame.Spike_Bit;
 
         fdef.shape = shape;
         fdef.friction= 0f;
@@ -171,6 +171,35 @@ public class Chara extends Sprite {
         //b2body.applyLinearImpulse(new Vector2(-1.5f, 1f), b2body.getWorldCenter(), true);
 
         
+    }
+    public void knockedup() throws InterruptedException {
+        CharaIsKnocked = true;
+
+        Gdx.app.log("Knockedup", "Spike");
+        Filter filter = new Filter();
+        MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play();
+        b2body.applyLinearImpulse(new Vector2(0.5f, 2f), b2body.getWorldCenter(), true);
+        //TimeUnit.SECONDS.sleep(1);
+//        settime = stateTimer;
+//        if(settime==stateTimer-1)
+//            CharaIsKnocked=false;
+        new java.util.Timer().schedule(new TimerTask(){
+            @Override
+            public void run() {
+                CharaIsKnocked=false;
+                new java.util.Timer().schedule(new TimerTask(){
+                    @Override
+                    public void run() {
+                        b2body.applyLinearImpulse(new Vector2(0.5f, 0.0f), b2body.getWorldCenter(), true);
+                    }
+                },1000,1000);
+
+            }
+        },500,500);
+
+        //b2body.applyLinearImpulse(new Vector2(-1.5f, 1f), b2body.getWorldCenter(), true);
+
+
     }
 
 

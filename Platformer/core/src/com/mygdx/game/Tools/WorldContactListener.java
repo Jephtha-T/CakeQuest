@@ -72,7 +72,6 @@ public class WorldContactListener implements ContactListener {
                 }
                 break;
 
-
             //Brittle Brick Interaction
             case MyGdxGame.Brick_Bit | MyGdxGame.Chara_Bit:
                 if(fixA.getUserData()=="bottom" && fixB.getFilterData().categoryBits == MyGdxGame.Brick_Bit)
@@ -81,6 +80,22 @@ public class WorldContactListener implements ContactListener {
                     ((InteractiveTileObject) fixA.getUserData()).onCollision();
                 break;
 
+            case MyGdxGame.Spike_Bit | MyGdxGame.Chara_Bit:
+                if(fixA.getUserData()=="bottom" && fixB.getFilterData().categoryBits == MyGdxGame.Spike_Bit) {
+                    try {
+                        ((InteractiveTileObject) fixB.getUserData()).knocked();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                else if(fixB.getUserData()=="bottom" && fixA.getFilterData().categoryBits == MyGdxGame.Spike_Bit) {
+                    try {
+                        ((InteractiveTileObject) fixA.getUserData()).knocked();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                break;
             //Obstacle Miss
             case MyGdxGame.Obstacle_Bit | MyGdxGame.Wall_Bit:
                 if(fixA.getFilterData().categoryBits == MyGdxGame.Obstacle_Bit)

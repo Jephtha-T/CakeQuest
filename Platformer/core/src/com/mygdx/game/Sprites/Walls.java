@@ -23,29 +23,6 @@ public class Walls extends InteractiveTileObject {
         setCategoryFilter(MyGdxGame.Wall_Bit);
         fixture.setUserData(this);
 
-//        PolygonShape polygon = new PolygonShape();
-//        Vector2 size = new Vector2((bounds.x + bounds.width * 0.5f) / MyGdxGame.PPM,
-//                (bounds.y + bounds.height * 0.5f ) / MyGdxGame.PPM);
-//        polygon.setAsBox(bounds.width * 0.5f / MyGdxGame.PPM,
-//                bounds.height * 0.5f / MyGdxGame.PPM,
-//                size,
-//                0.0f);
-//
-//        BodyDef bdef = new BodyDef();
-//        bdef.type = BodyDef.BodyType.StaticBody;
-//        body = world.createBody(bdef);
-//
-//        PolygonShape pShape = new PolygonShape();
-//        pShape.setAsBox(20 / PPM, 25 / PPM);
-//
-//        FixtureDef fdef= new FixtureDef();
-//        fdef.shape = pShape;
-//        body.createFixture(fdef).setUserData(this);
-
-
-
-
-
     }
 
 

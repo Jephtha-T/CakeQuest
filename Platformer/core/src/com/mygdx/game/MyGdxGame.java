@@ -23,7 +23,7 @@ public class MyGdxGame extends Game {
 	public static final short Goal_Bit = 16;
 	public static final short Destroyed_Bit = 32;
 	public static final short Obstacle_Bit = 64;
-	public static final short Obstacle_Head_Bit = 128;
+	public static final short Spike_Bit = 128;
 	public SpriteBatch batch; //Import all resources
 
 	public static AssetManager manager;
