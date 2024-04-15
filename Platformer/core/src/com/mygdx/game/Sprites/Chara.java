@@ -12,10 +12,21 @@ import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.Screens.PlayScreen;
 
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Chara extends Sprite {
-    public enum State{Standing, Falling, Jumping, Running, Knocked};
+    private long elapsedTime;
+
+    private boolean isTicking;
+
+    private long startTime;
+    private boolean speedup;
+
+    public enum State {Standing, Falling, Jumping, Running, Knocked}
+
+    ;
     public State currentState;
     public State previousState;
     public World world;
@@ -42,37 +53,37 @@ public class Chara extends Sprite {
         runningRight = true;
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
-        for(int i=1; i<8; i++)
-            frames.add(new TextureRegion(getTexture(), i*32, 96+16, 32, 32));
-        charaRun= new Animation(0.1f,frames);
+        for (int i = 1; i < 8; i++)
+            frames.add(new TextureRegion(getTexture(), i * 32, 96 + 16, 32, 32));
+        charaRun = new Animation(0.1f, frames);
         frames.clear();
-        for(int i=1; i<9; i++)
-            frames.add(new TextureRegion(getTexture(), i*32, 160+16, 32, 32));
+        for (int i = 1; i < 9; i++)
+            frames.add(new TextureRegion(getTexture(), i * 32, 160 + 16, 32, 32));
         charaJump = new Animation(0.1f, frames);
         frames.clear();
-        for(int i=1; i<9; i++)
-            frames.add(new TextureRegion(getTexture(), i*32, 224+16, 32, 32));
+        for (int i = 1; i < 9; i++)
+            frames.add(new TextureRegion(getTexture(), i * 32, 224 + 16, 32, 32));
         charaKnock = new Animation(0.1f, frames);
 
-        charaStand = new TextureRegion(getTexture(), 0, 0+16, 32, 32);
+        charaStand = new TextureRegion(getTexture(), 0, 0 + 16, 32, 32);
 
         defineChara();
-        setBounds(0, 0, 16/MyGdxGame.PPM, 16/MyGdxGame.PPM);
+        setBounds(0, 0, 16 / MyGdxGame.PPM, 16 / MyGdxGame.PPM);
         setRegion(charaStand);
     }
 
 
-    public void update(float dt){
-            setPosition(b2body.getPosition().x-getWidth()/2, b2body.getPosition().y-getHeight()/2);
-            setRegion(getFrame(dt));
+    public void update(float dt) {
+        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+        setRegion(getFrame(dt));
     }
 
 
-    public TextureRegion getFrame(float dt){
+    public TextureRegion getFrame(float dt) {
         currentState = getState();
 
         TextureRegion region;
-        switch(currentState){
+        switch (currentState) {
             case Knocked:
                 region = (TextureRegion) charaKnock.getKeyFrame(stateTimer, true);
                 break;
@@ -96,22 +107,23 @@ public class Chara extends Sprite {
 //            region.flip(true, false);
 //            runningRight = true;
 //        }
-        stateTimer = currentState == previousState ? stateTimer+dt:0;
+        stateTimer = currentState == previousState ? stateTimer + dt : 0;
         previousState = currentState;
         return region;
     }
 
-    public State getState(){
-        if(CharaIsKnocked)
+    public State getState() {
+        if (CharaIsKnocked)
             return State.Knocked;
-        else if(b2body.getLinearVelocity().y>0)
+        else if (b2body.getLinearVelocity().y > 0)
             return State.Jumping;
-        else if(b2body.getLinearVelocity().y<0)
+        else if (b2body.getLinearVelocity().y < 0)
             return State.Falling;
-        else if(b2body.getLinearVelocity().x!=0)
+        else if (b2body.getLinearVelocity().x != 0)
             return State.Running;
         else return State.Standing;
     }
+
     public void defineChara() {
         BodyDef bdef = new BodyDef();
         bdef.position.set(150 / MyGdxGame.PPM, 50 / MyGdxGame.PPM);
@@ -122,10 +134,10 @@ public class Chara extends Sprite {
         shape.setRadius(7 / MyGdxGame.PPM);
 
         fdef.filter.categoryBits = MyGdxGame.Chara_Bit;
-        fdef.filter.maskBits = MyGdxGame.Default_Bit | MyGdxGame.Wall_Bit | MyGdxGame.Goal_Bit | MyGdxGame.Obstacle_Bit| MyGdxGame.Brick_Bit| MyGdxGame.Spike_Bit;
+        fdef.filter.maskBits = MyGdxGame.Default_Bit | MyGdxGame.Wall_Bit | MyGdxGame.Goal_Bit | MyGdxGame.Obstacle_Bit | MyGdxGame.Brick_Bit | MyGdxGame.Spike_Bit;
 
         fdef.shape = shape;
-        fdef.friction= 0f;
+        fdef.friction = 0f;
         b2body.createFixture(fdef).setUserData(this);
         b2body.setLinearDamping(0f);
         shape.dispose();
@@ -143,6 +155,7 @@ public class Chara extends Sprite {
         b2body.createFixture(fdef).setUserData("bottom");
 
     }
+
     public void knocked() throws InterruptedException {
         CharaIsKnocked = true;
 
@@ -150,28 +163,17 @@ public class Chara extends Sprite {
         Filter filter = new Filter();
         MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play();
         b2body.applyLinearImpulse(new Vector2(-1.5f, 0.5f), b2body.getWorldCenter(), true);
-        //TimeUnit.SECONDS.sleep(1);
-//        settime = stateTimer;
-//        if(settime==stateTimer-1)
-//            CharaIsKnocked=false;
-        new java.util.Timer().schedule(new TimerTask(){
-            @Override
-            public void run() {
-                CharaIsKnocked=false;
-                new java.util.Timer().schedule(new TimerTask(){
-                    @Override
-                    public void run() {
-                b2body.applyLinearImpulse(new Vector2(0.5f, 0.0f), b2body.getWorldCenter(), true);
-                    }
-                },1000,1000);
 
-            }
-        },500,500);
 
-        //b2body.applyLinearImpulse(new Vector2(-1.5f, 1f), b2body.getWorldCenter(), true);
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        Runnable task = () -> {
+            CharaIsKnocked = false;
+            b2body.applyLinearImpulse(new Vector2(0.5f, 0.0f), b2body.getWorldCenter(), true);
+        };
+        executor.scheduleAtFixedRate(task, 500, 500, TimeUnit.MILLISECONDS);
 
-        
     }
+
     public void knockedup() throws InterruptedException {
         CharaIsKnocked = true;
 
@@ -179,28 +181,13 @@ public class Chara extends Sprite {
         Filter filter = new Filter();
         MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play();
         b2body.applyLinearImpulse(new Vector2(0.5f, 2f), b2body.getWorldCenter(), true);
-        //TimeUnit.SECONDS.sleep(1);
-//        settime = stateTimer;
-//        if(settime==stateTimer-1)
-//            CharaIsKnocked=false;
-        new java.util.Timer().schedule(new TimerTask(){
-            @Override
-            public void run() {
-                CharaIsKnocked=false;
-                new java.util.Timer().schedule(new TimerTask(){
-                    @Override
-                    public void run() {
-                        b2body.applyLinearImpulse(new Vector2(0.5f, 0.0f), b2body.getWorldCenter(), true);
-                    }
-                },1000,1000);
-
-            }
-        },500,500);
-
-        //b2body.applyLinearImpulse(new Vector2(-1.5f, 1f), b2body.getWorldCenter(), true);
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        Runnable task = () -> {
+            CharaIsKnocked = false;
+            b2body.applyLinearImpulse(new Vector2(0.5f, 0.0f), b2body.getWorldCenter(), true);
+        };
+        executor.scheduleAtFixedRate(task, 500, 500, TimeUnit.MILLISECONDS);
 
 
     }
-
-
 }

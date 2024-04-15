@@ -46,42 +46,32 @@ public class LevelScreen implements Screen {
 
         // Load textures
         Texture splashTexture = new Texture("Levels/levels_background.png");
-        buttonTextures = new Texture[5];
-        buttonHoverTextures = new Texture[5];
+        buttonTextures = new Texture[3]; // Adjusted for 3 levels
+        buttonHoverTextures = new Texture[3]; // Adjusted for 3 levels
         buttonTextures[0] = new Texture("Levels/1.png");
         buttonHoverTextures[0] = new Texture("Levels/1hover.png");
         buttonTextures[1] = new Texture("Levels/2.png");
         buttonHoverTextures[1] = new Texture("Levels/2hover.png");
         buttonTextures[2] = new Texture("Levels/3.png");
         buttonHoverTextures[2] = new Texture("Levels/3hover.png");
-        buttonTextures[3] = new Texture("Levels/4.png");
-        buttonHoverTextures[3] = new Texture("Levels/4hover.png");
-        buttonTextures[4] = new Texture("Levels/5.png");
-        buttonHoverTextures[4] = new Texture("Levels/5hover.png");
 
         // Create sprites
         splash = new Sprite(splashTexture);
         splash.setSize(MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT); // Use predefined dimensions
 
-        levelButtons = new Sprite[5];
-        isLevelHovering = new boolean[5];
+        levelButtons = new Sprite[3]; // Adjusted for 3 levels
+        isLevelHovering = new boolean[3]; // Adjusted for 3 levels
         float buttonWidth = 100; // Increase the width of the button
         float buttonHeight = 100; // Increase the height of the button
         float buttonSpacing = 1; // Increase the spacing between buttons
         float totalButtonWidth = 1 * buttonWidth + 1 * buttonSpacing;
         float startX = (MyGdxGame.V_WIDTH - totalButtonWidth) / 6; // Horizontal position for upper buttons
-        float startXLower = (MyGdxGame.V_WIDTH - totalButtonWidth) / 3; // Horizontal position for lower buttons
-        float startY = MyGdxGame.V_HEIGHT * 3 / 5 - buttonHeight / 2; // 3/4 of the screen height for levels 1 to 3
-        float startYLower = MyGdxGame.V_HEIGHT / 4 - buttonHeight / 2; // 1/4 of the screen height for levels 4 and 5
-
-        // Initialize and position buttons
-        for (int i = 0; i < 5; i++) {
+       // float startY = MyGdxGame.V_HEIGHT * 3 / 5 - buttonHeight / 2; // 3/4 of the screen height for levels 1 to 3
+        float startY = MyGdxGame.V_HEIGHT / 2 - buttonHeight / 2;
+        // Initialize and position buttons for the first 3 levels
+        for (int i = 0; i < 3; i++) {
             levelButtons[i] = new Sprite(buttonTextures[i]);
-            if (i < 3) {
-                levelButtons[i].setPosition(startX + i * (buttonWidth + buttonSpacing), startY);
-            } else {
-                levelButtons[i].setPosition(startXLower + (i - 3) * (buttonWidth + buttonSpacing), startYLower);
-            }
+            levelButtons[i].setPosition(startX + i * (buttonWidth + buttonSpacing), startY);
         }
     }
 
@@ -116,7 +106,7 @@ public class LevelScreen implements Screen {
         camera.unproject(mousePos);
 
         // Check if the mouse is hovering over any button
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 3; i++) { // Adjusted for 3 levels
             if ((mousePos.x >= levelButtons[i].getX() && mousePos.x <= levelButtons[i].getX() + levelButtons[i].getWidth()) &&
                     (mousePos.y >= levelButtons[i].getY() && mousePos.y <= levelButtons[i].getY() + levelButtons[i].getHeight())) {
                 isLevelHovering[i] = true;
@@ -126,7 +116,7 @@ public class LevelScreen implements Screen {
         }
 
         // Draw buttons based on hovering state
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 3; i++) { // Adjusted for 3 levels
             if (isLevelHovering[i]) {
                 batch.draw(buttonHoverTextures[i], levelButtons[i].getX(), levelButtons[i].getY());
             } else {
@@ -136,22 +126,19 @@ public class LevelScreen implements Screen {
 
         batch.end();
 
-        // Handle input for the first button only
+        // Handle input for the first 3 buttons only
         if (Gdx.input.justTouched() && isLevelHovering[0]) {
-            // Button is pressed, transition to PlayScreen
-            game.setScreen(new PlayScreen((MyGdxGame) game, "Level_1.tmx")); // Cast the game instance to MyGdxGame
+            game.setScreen(new PlayScreen((MyGdxGame) game, "Level_1.tmx"));
             music.setLooping(false);
             music.stop();
         }
         if (Gdx.input.justTouched() && isLevelHovering[1]) {
-            // Button is pressed, transition to PlayScreen
-            game.setScreen(new PlayScreen((MyGdxGame) game, "Level_2.tmx")); // Cast the game instance to MyGdxGame
+            game.setScreen(new PlayScreen((MyGdxGame) game, "Level_2.tmx"));
             music.setLooping(false);
             music.stop();
         }
         if (Gdx.input.justTouched() && isLevelHovering[2]) {
-            // Button is pressed, transition to PlayScreen
-            game.setScreen(new PlayScreen((MyGdxGame) game, "Level_3.tmx")); // Cast the game instance to MyGdxGame
+            game.setScreen(new PlayScreen((MyGdxGame) game, "Level_3.tmx"));
             music.setLooping(false);
             music.stop();
         }
@@ -167,5 +154,5 @@ public class LevelScreen implements Screen {
 
     @Override
     public void hide(){
-}
+    }
 }

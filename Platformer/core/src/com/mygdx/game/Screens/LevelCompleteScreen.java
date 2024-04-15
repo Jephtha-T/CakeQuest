@@ -57,10 +57,11 @@ public class LevelCompleteScreen implements Screen {
         Texture splashTexture = new Texture("Menu/LevelCompletebg.jpg");
         buttonTexture = new Texture("Menu/replaybtn.png");
         buttonHoverTexture = new Texture("Menu/replaybtn_hover.png");
-        LevelbuttonTexture = new Texture("Menu/levelbtn.png");
+        LevelbuttonTexture = new Texture("Menu/levelbtn.png");  // Use different texture for LevelButton
         LevelbuttonHoverTexture = new Texture("Menu/levelbtn_hover.png");
-        MainbuttonTexture = new Texture("Menu/mainbtn.png");
+        MainbuttonTexture = new Texture("Menu/mainbtn.png");  // Use different texture for MainButton
         MainbuttonHoverTexture = new Texture("Menu/mainbtn_hover.png");
+
 
         // Create sprites
         splash = new Sprite(splashTexture);
@@ -78,19 +79,11 @@ public class LevelCompleteScreen implements Screen {
         MainButton.setSize(buttonWidth, buttonHeight);
 
 
-        // Position the button in the middle of the screen
-        playButton.setPosition(
-                (MyGdxGame.V_WIDTH - playButton.getWidth()) / 2,
-                MyGdxGame.V_HEIGHT / 5 - playButton.getHeight() / 2 // Center vertically
-        );
-        LevelButton.setPosition(
-                (MyGdxGame.V_WIDTH - LevelButton.getWidth()) / 2,
-                (MyGdxGame.V_HEIGHT / 5 - LevelButton.getHeight() / 2) - 150 // Center vertically
-        );
-        MainButton.setPosition(
-                (MyGdxGame.V_WIDTH - MainButton.getWidth()) / 2,
-                (MyGdxGame.V_HEIGHT / 5 - MainButton.getHeight() / 2) - 300 // Center vertically
-        );
+        playButton.setPosition((MyGdxGame.V_WIDTH - 3 * buttonWidth) / 2, 20); // Adjust x-coordinate as needed
+        LevelButton.setPosition((MyGdxGame.V_WIDTH - buttonWidth) / 2, 20); // Adjust x-coordinate as needed
+        MainButton.setPosition((MyGdxGame.V_WIDTH + buttonWidth) / 2, 20); // Adjust x-coordinate as needed
+
+
     }
 
 
@@ -112,6 +105,32 @@ public class LevelCompleteScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
     }
 
+    /*@Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        batch.begin();
+        splash.draw(batch);
+
+        // Convert mouse coordinates to world coordinates
+        Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(mousePos);
+
+        // Update button hover state
+        updateButtonHoverState(playButton, buttonTexture, buttonHoverTexture, mousePos);
+        updateButtonHoverState(LevelButton, LevelbuttonTexture, LevelbuttonHoverTexture, mousePos);
+        updateButtonHoverState(MainButton, MainbuttonTexture, MainbuttonHoverTexture, mousePos);
+
+        // Draw buttons
+        playButton.draw(batch);
+        LevelButton.draw(batch);
+        MainButton.draw(batch);
+        batch.end();
+
+        // Handle input
+        handleInput();
+    }*/
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -124,63 +143,67 @@ public class LevelCompleteScreen implements Screen {
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(mousePos);
 
-        // Check if the mouse is hovering over the button
-        if ((mousePos.x >= playButton.getX() &&
-                mousePos.x <= playButton.getX() + playButton.getWidth()) &&
-                (mousePos.y >= playButton.getY()+50 &&
-                        mousePos.y <= playButton.getY() + playButton.getHeight()-50)) {
-            PlayisHovering = true;
-            playButton.setTexture(buttonHoverTexture);
-        } else {
-            PlayisHovering = false;
-            playButton.setTexture(buttonTexture);
-        }
+        // Update button hover state
+        updateButtonHoverState(playButton, buttonTexture, buttonHoverTexture, mousePos);
+        updateButtonHoverState(LevelButton, LevelbuttonTexture, LevelbuttonHoverTexture, mousePos);
+        updateButtonHoverState(MainButton, MainbuttonTexture, MainbuttonHoverTexture, mousePos);
 
+        // Draw buttons
         playButton.draw(batch);
-
-        if ((mousePos.x >= LevelButton.getX() &&
-                mousePos.x <= LevelButton.getX() + LevelButton.getWidth()) &&
-                (mousePos.y >= LevelButton.getY()+50 &&
-                        mousePos.y <= LevelButton.getY() + LevelButton.getHeight()-50)) {
-            LevelisHovering = true;
-            LevelButton.setTexture(LevelbuttonHoverTexture);
-        } else {
-            LevelisHovering = false;
-            LevelButton.setTexture(LevelbuttonTexture);
-        }
-
         LevelButton.draw(batch);
-
-        if ((mousePos.x >= MainButton.getX() &&
-                mousePos.x <= MainButton.getX() + MainButton.getWidth()) &&
-                (mousePos.y >= MainButton.getY()+50 &&
-                        mousePos.y <= MainButton.getY() + MainButton.getHeight()-50)) {
-            MainisHovering = true;
-            MainButton.setTexture(MainbuttonHoverTexture);
-        } else {
-            MainisHovering = false;
-            MainButton.setTexture(MainbuttonTexture);
-        }
-
         MainButton.draw(batch);
         batch.end();
 
         // Handle input
-        if (Gdx.input.justTouched() && PlayisHovering) {
-            // Button is pressed, transition to PlayScreen
-            game.setScreen(new PlayScreen((MyGdxGame) game, levelname)); // Cast the game instance to MyGdxGame
-            music.setLooping(false);
-            music.stop();
+        handleInput();
+    }
+
+    private void updateButtonHoverState(Sprite button, Texture normalTexture, Texture hoverTexture, Vector3 mousePos) {
+        boolean isHovering = button.getBoundingRectangle().contains(mousePos.x, mousePos.y);
+
+        if (button == playButton) {
+            PlayisHovering = isHovering;
+            if (isHovering) {
+                LevelisHovering = false;
+                MainisHovering = false;
+            }
+        } else if (button == LevelButton) {
+            LevelisHovering = isHovering;
+            if (isHovering) {
+                PlayisHovering = false;
+                MainisHovering = false;
+            }
+        } else if (button == MainButton) {
+            MainisHovering = isHovering;
+            if (isHovering) {
+                PlayisHovering = false;
+                LevelisHovering = false;
+            }
         }
-        else if (Gdx.input.justTouched() && LevelisHovering) {
-            // Button is pressed, transition to PlayScreen
-            goToLevelSelect();
-        }
-        else if (Gdx.input.justTouched() && MainisHovering) {
-            // Button is pressed, transition to PlayScreen
-            goToMainMenu();
+
+        if (isHovering) {
+            button.setTexture(hoverTexture);
+        } else {
+            button.setTexture(normalTexture);
         }
     }
+
+
+    private void handleInput() {
+        if (Gdx.input.justTouched()) {
+            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(touchPos);
+
+            if (playButton.getBoundingRectangle().contains(touchPos.x, touchPos.y)) {
+                game.setScreen(new PlayScreen((MyGdxGame) game, levelname));
+            } else if (LevelButton.getBoundingRectangle().contains(touchPos.x, touchPos.y)) {
+                goToLevelSelect();
+            } else if (MainButton.getBoundingRectangle().contains(touchPos.x, touchPos.y)) {
+                goToMainMenu();
+            }
+        }
+    }
+
 
     @Override
     public void pause() {
