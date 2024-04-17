@@ -2,6 +2,7 @@ package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
@@ -19,14 +20,20 @@ public class LevelScreen implements Screen {
     private Game game;
     private SpriteBatch batch;
     private Sprite splash;
+    private Sprite instructionscren;
     private Sprite[] levelButtons;
     private Texture[] buttonTextures;
     private Texture[] buttonHoverTextures;
+    private Texture instructions;
+    private boolean imageVisible;
     private boolean[] isLevelHovering;
     private Viewport viewport;
     private Camera camera;
     private Music music;
     private float startXLower; // Horizontal position for lower buttons
+    public static boolean level1c;
+    public static boolean level2c;
+    public static boolean level3c;
 
     public LevelScreen(Game game) {
         this.game = game;
@@ -55,6 +62,10 @@ public class LevelScreen implements Screen {
         buttonTextures[2] = new Texture("Levels/3.png");
         buttonHoverTextures[2] = new Texture("Levels/3hover.png");
 
+        instructions = new Texture("Levels/instruction_screen.png");
+        instructionscren = new Sprite(instructions);
+        instructionscren.setSize(MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT); // Use predefined dimensions
+        imageVisible=false;
         // Create sprites
         splash = new Sprite(splashTexture);
         splash.setSize(MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT); // Use predefined dimensions
@@ -85,6 +96,8 @@ public class LevelScreen implements Screen {
         for (Texture texture : buttonHoverTextures) {
             texture.dispose();
         }
+        music.dispose();
+        instructions.dispose();
     }
 
     @Override
@@ -100,6 +113,9 @@ public class LevelScreen implements Screen {
 
         batch.begin();
         splash.draw(batch);
+        if (imageVisible) {
+            showinstructions();
+        }
 
         // Convert mouse coordinates to world coordinates
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -117,9 +133,9 @@ public class LevelScreen implements Screen {
 
         // Draw buttons based on hovering state
         for (int i = 0; i < 3; i++) { // Adjusted for 3 levels
-            if (isLevelHovering[i]) {
+            if (isLevelHovering[i] && !imageVisible) {
                 batch.draw(buttonHoverTextures[i], levelButtons[i].getX(), levelButtons[i].getY());
-            } else {
+            } else if(!imageVisible){
                 batch.draw(buttonTextures[i], levelButtons[i].getX(), levelButtons[i].getY());
             }
         }
@@ -127,23 +143,29 @@ public class LevelScreen implements Screen {
         batch.end();
 
         // Handle input for the first 3 buttons only
-        if (Gdx.input.justTouched() && isLevelHovering[0]) {
-            game.setScreen(new PlayScreen((MyGdxGame) game, "Level_1.tmx"));
-            music.setLooping(false);
-            music.stop();
+        if (Gdx.input.justTouched() && isLevelHovering[0] && !imageVisible) {
+            imageVisible = true;
         }
-        if (Gdx.input.justTouched() && isLevelHovering[1]) {
+        if (Gdx.input.justTouched() && isLevelHovering[1] && level1c && !imageVisible) {
             game.setScreen(new PlayScreen((MyGdxGame) game, "Level_2.tmx"));
             music.setLooping(false);
             music.stop();
         }
-        if (Gdx.input.justTouched() && isLevelHovering[2]) {
+        if (Gdx.input.justTouched() && isLevelHovering[2] && level2c && !imageVisible) {
             game.setScreen(new PlayScreen((MyGdxGame) game, "Level_3.tmx"));
             music.setLooping(false);
             music.stop();
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && imageVisible){
+            game.setScreen(new PlayScreen((MyGdxGame) game, "Level_1.tmx"));
+            music.setLooping(false);
+            music.stop();
+            dispose();
+        }
     }
-
+    public void showinstructions(){
+        instructionscren.draw(batch);
+    }
     @Override
     public void pause() {
     }

@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
+import static com.mygdx.game.Screens.MenuScreen.volumeLevel;
+
 public class LevelCompleteScreen implements Screen {
     private Game game;
     private SpriteBatch batch;
@@ -22,6 +24,7 @@ public class LevelCompleteScreen implements Screen {
     private Sprite playButton;
     private Sprite LevelButton;
     private Sprite MainButton;
+    private Texture splashTexture;
     private Texture buttonTexture;
     private Texture buttonHoverTexture;
     private Texture LevelbuttonTexture;
@@ -52,9 +55,13 @@ public class LevelCompleteScreen implements Screen {
         music = MyGdxGame.manager.get("Audio/bgmenu.mp3", Music.class);
         music.setLooping(true);
         music.play();
+        music.setVolume(volumeLevel);
 
         // Load textures
-        Texture splashTexture = new Texture("Menu/LevelCompletebg.jpg");
+        if(PlayScreen.levelname =="Level_3.tmx")
+            splashTexture = new Texture("Menu/Cake.png");
+        else
+            splashTexture = new Texture("Menu/LevelCompletebg.jpg");
         buttonTexture = new Texture("Menu/replaybtn.png");
         buttonHoverTexture = new Texture("Menu/replaybtn_hover.png");
         LevelbuttonTexture = new Texture("Menu/levelbtn.png");  // Use different texture for LevelButton

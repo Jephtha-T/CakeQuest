@@ -33,7 +33,7 @@ public class MenuScreen implements Screen {
     private Stage stage;
     private Sprite volumeButton;
     private boolean isVolumeButtonHovering;
-    private float volumeLevel = 0.5f; // Initial volume level
+    public static float volumeLevel = 0.5f; // Initial volume level
     private Texture volumeUpTexture;
     private Texture volumeDownTexture;
     private Sprite volumeUpButton;
@@ -203,6 +203,7 @@ public class MenuScreen implements Screen {
             // Toggle the state of the volume button
             isVolumeButtonClicked = !isVolumeButtonClicked;
         }
+        music.setVolume(volumeLevel);
 
     }
 

@@ -9,6 +9,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.Screens.PlayScreen;
 
+import static com.mygdx.game.Screens.MenuScreen.volumeLevel;
+
 public class BrittlePlatform extends InteractiveTileObject {
 
 
@@ -24,7 +26,7 @@ public class BrittlePlatform extends InteractiveTileObject {
     @Override
     public void onCollision() {
         Gdx.app.log("Brittle", "Collision");
-        MyGdxGame.manager.get("Audio/break.mp3", Sound.class).play();
+        MyGdxGame.manager.get("Audio/break.mp3", Sound.class).play(volumeLevel);
         setCategoryFilter(MyGdxGame.Destroyed_Bit);
         getCell().setTile(null);
     }

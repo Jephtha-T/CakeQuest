@@ -24,18 +24,10 @@ public class WorldContactListener implements ContactListener {
             //Wall Collision
             case MyGdxGame.Wall_Bit | MyGdxGame.Chara_Bit:
                 if(fixA.getUserData()=="head" && fixB.getFilterData().categoryBits == MyGdxGame.Wall_Bit){
-                    try {
                         ((InteractiveTileObject ) fixB.getUserData()).knocked();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
                 }
                 else if(fixB.getUserData()=="head" && fixA.getFilterData().categoryBits == MyGdxGame.Wall_Bit){
-                    try {
                         ((InteractiveTileObject ) fixA.getUserData()).knocked();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
                 }
                 break;
 
@@ -50,19 +42,13 @@ public class WorldContactListener implements ContactListener {
             //Obstacle Collision
             case MyGdxGame.Obstacle_Bit | MyGdxGame.Chara_Bit:
                 if(fixB.getUserData()=="head" && fixA.getFilterData().categoryBits == MyGdxGame.Obstacle_Bit) {
-                    try {
                         ((Obstacle) fixA.getUserData()).hit();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
 
                 }
                 else if(fixA.getUserData()=="head" && fixB.getFilterData().categoryBits == MyGdxGame.Obstacle_Bit) {
-                    try {
+
                         ((Obstacle) fixB.getUserData()).hit();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+
                 }
                 else if(fixA.getFilterData().categoryBits == MyGdxGame.Obstacle_Bit) {
                     ((Obstacle) fixA.getUserData()).destroy();
@@ -82,18 +68,14 @@ public class WorldContactListener implements ContactListener {
 
             case MyGdxGame.Spike_Bit | MyGdxGame.Chara_Bit:
                 if(fixA.getUserData()=="bottom" && fixB.getFilterData().categoryBits == MyGdxGame.Spike_Bit) {
-                    try {
+
                         ((InteractiveTileObject) fixB.getUserData()).knocked();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+
                 }
                 else if(fixB.getUserData()=="bottom" && fixA.getFilterData().categoryBits == MyGdxGame.Spike_Bit) {
-                    try {
+
                         ((InteractiveTileObject) fixA.getUserData()).knocked();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+
                 }
                 break;
             //Obstacle Miss

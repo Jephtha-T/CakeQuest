@@ -16,13 +16,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static com.mygdx.game.Screens.MenuScreen.volumeLevel;
+
 public class Chara extends Sprite {
-    private long elapsedTime;
 
-    private boolean isTicking;
-
-    private long startTime;
-    private boolean speedup;
 
     public enum State {Standing, Falling, Jumping, Running, Knocked}
 
@@ -156,37 +153,37 @@ public class Chara extends Sprite {
 
     }
 
-    public void knocked() throws InterruptedException {
+    public void knocked(){
         CharaIsKnocked = true;
 
         Gdx.app.log("Knocked", "Wall");
         Filter filter = new Filter();
-        MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play();
+        MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play(volumeLevel);
         b2body.applyLinearImpulse(new Vector2(-1.5f, 0.5f), b2body.getWorldCenter(), true);
 
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         Runnable task = () -> {
-            CharaIsKnocked = false;
-            b2body.applyLinearImpulse(new Vector2(0.5f, 0.0f), b2body.getWorldCenter(), true);
+                CharaIsKnocked = false;
+                b2body.applyLinearImpulse(new Vector2(0.5f, 0.0f), b2body.getWorldCenter(), true);
         };
-        executor.scheduleAtFixedRate(task, 500, 500, TimeUnit.MILLISECONDS);
+        executor.schedule(task, 500, TimeUnit.MILLISECONDS);
 
     }
 
-    public void knockedup() throws InterruptedException {
+    public void knockedup(){
         CharaIsKnocked = true;
 
         Gdx.app.log("Knockedup", "Spike");
         Filter filter = new Filter();
-        MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play();
+        MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play(volumeLevel);
         b2body.applyLinearImpulse(new Vector2(0.5f, 2f), b2body.getWorldCenter(), true);
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         Runnable task = () -> {
-            CharaIsKnocked = false;
-            b2body.applyLinearImpulse(new Vector2(0.5f, 0.0f), b2body.getWorldCenter(), true);
+                CharaIsKnocked = false;
+                b2body.applyLinearImpulse(new Vector2(0.5f, 0.0f), b2body.getWorldCenter(), true);
         };
-        executor.scheduleAtFixedRate(task, 500, 500, TimeUnit.MILLISECONDS);
+        executor.schedule(task, 500, TimeUnit.MILLISECONDS);
 
 
     }

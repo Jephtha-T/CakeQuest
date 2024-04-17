@@ -105,32 +105,6 @@ public class GameOverScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
     }
 
-    /*@Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.begin();
-        splash.draw(batch);
-
-        // Convert mouse coordinates to world coordinates
-        Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        camera.unproject(mousePos);
-
-        // Update button hover state
-        updateButtonHoverState(playButton, buttonTexture, buttonHoverTexture, mousePos);
-        updateButtonHoverState(LevelButton, LevelbuttonTexture, LevelbuttonHoverTexture, mousePos);
-        updateButtonHoverState(MainButton, MainbuttonTexture, MainbuttonHoverTexture, mousePos);
-
-        // Draw buttons
-        playButton.draw(batch);
-        LevelButton.draw(batch);
-        MainButton.draw(batch);
-        batch.end();
-
-        // Handle input
-        handleInput();
-    }*/
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);

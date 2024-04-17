@@ -70,9 +70,9 @@ public class RollingObstacle extends Obstacle {
     }
 
     @Override
-    public void hit() throws InterruptedException {
+    public void hit(){
         Gdx.app.log("Knocked", "RollingObstacle");
-        MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play();
+        //MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play();
         Chara player;
         player = screen.player;
         player.knocked();

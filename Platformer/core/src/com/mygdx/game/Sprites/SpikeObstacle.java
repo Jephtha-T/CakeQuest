@@ -21,10 +21,10 @@ public class SpikeObstacle extends InteractiveTileObject {
     }
 
 
-    public void knocked() throws InterruptedException {
+    public void knocked(){
 
         Gdx.app.log("Knocked", "Wall");
-        MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play();
+        //MyGdxGame.manager.get("Audio/hit.wav", Sound.class).play();
         Chara player;
         player = screen.player;
         player.knockedup();

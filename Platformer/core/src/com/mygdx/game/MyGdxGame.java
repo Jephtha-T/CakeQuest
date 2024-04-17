@@ -29,6 +29,7 @@ public class MyGdxGame extends Game {
 	public static AssetManager manager;
 	private Screen previousScreen;
 
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();

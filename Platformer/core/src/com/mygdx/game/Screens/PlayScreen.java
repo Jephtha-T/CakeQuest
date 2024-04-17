@@ -29,6 +29,8 @@ import com.mygdx.game.Sprites.Obstacle;
 import com.mygdx.game.Tools.B2WorldCreator;
 import com.mygdx.game.Tools.WorldContactListener;
 
+import static com.mygdx.game.Screens.MenuScreen.volumeLevel;
+
 
 public class PlayScreen implements Screen {
     public MyGdxGame game;
@@ -71,6 +73,7 @@ public class PlayScreen implements Screen {
         world.setContactListener(new WorldContactListener());
 
         music = MyGdxGame.manager.get("Audio/bgmusic.mp3", Music.class);
+        music.setVolume(volumeLevel);
         music.setLooping(true);
         music.play();
     }
@@ -128,7 +131,7 @@ public class PlayScreen implements Screen {
         player.update(dt);
         for(Obstacle obstacle : creator.getObstacles()) {
             obstacle.update(dt);
-            if (obstacle.getX() < player.getX() + 256 / MyGdxGame.PPM) {
+            if (obstacle.getX() < player.getX() + 300 / MyGdxGame.PPM) {
                 obstacle.b2body.setActive(true);
             }
         }
@@ -185,9 +188,9 @@ public class PlayScreen implements Screen {
             Gdx.app.log("Chara", "Out of Bounds");
             music.setLooping(false);
             music.stop();
-            dispose();
             game.setPreviousScreen(this);
             game.setScreen(new GameOverScreen((MyGdxGame) game, levelname));
+            //dispose();
 
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
